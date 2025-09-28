@@ -17,6 +17,7 @@ const DERIVATION_PATH: u8 = 3;
 const ADDRESS: u8 = 4;
 const ORIGIN: u8 = 5;
 const SIGN_TYPE: u8 = 6;
+const CHAIN_ID: u8 = 7;
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub enum SignType {
@@ -46,6 +47,7 @@ pub struct SolSignRequest {
     address: Option<Bytes>,
     origin: Option<String>,
     sign_type: SignType,
+    chain_id: Option<String>, 
 }
 
 impl SolSignRequest {
@@ -77,6 +79,10 @@ impl SolSignRequest {
         self.sign_type = sign_type
     }
 
+    pub fn set_chain_id(&mut self, chain_id: String) {
+        self.chain_id = Some(chain_id)
+    }
+
     pub fn new(
         request_id: Option<Bytes>,
         sign_data: Bytes,
@@ -84,6 +90,7 @@ impl SolSignRequest {
         address: Option<Bytes>,
         origin: Option<String>,
         sign_type: SignType,
+        chain_id: Option<String>,
     ) -> SolSignRequest {
         SolSignRequest {
             request_id,
@@ -92,6 +99,7 @@ impl SolSignRequest {
             address,
             origin,
             sign_type,
+            chain_id,
         }
     }
     pub fn get_request_id(&self) -> Option<Bytes> {
@@ -111,6 +119,10 @@ impl SolSignRequest {
     }
     pub fn get_sign_type(&self) -> SignType {
         self.sign_type.clone()
+    }
+
+    pub fn get_chain_id(&self) -> Option<String> {
+        self.chain_id.clone()
     }
 
     fn get_map_size(&self) -> u64 {
@@ -165,6 +177,10 @@ impl<C> minicbor::Encode<C> for SolSignRequest {
         e.int(Int::from(SIGN_TYPE))?
             .int(Int::from(self.sign_type.clone() as u8))?;
 
+        if let Some(chain_id) = &self.chain_id {
+            e.int(Int::from(CHAIN_ID))?.str(chain_id)?;
+        }
+
         Ok(())
     }
 }
@@ -199,6 +215,9 @@ impl<'b, C> minicbor::Decode<'b, C> for SolSignRequest {
                             .map_err(|e| minicbor::decode::Error::message(e.to_string()))?,
                     )
                     .map_err(minicbor::decode::Error::message)?;
+                }
+                CHAIN_ID => {
+                    obj.chain_id = Some(d.str()?.to_string());
                 }
                 _ => {}
             }
