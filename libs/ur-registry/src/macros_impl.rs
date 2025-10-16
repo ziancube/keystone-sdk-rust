@@ -40,6 +40,8 @@ use crate::iota::{
     iota_signature::IotaSignature,
 };
 use crate::keypal::keypal_device_info::KeypalDeviceInfo;
+use crate::keypal::keypal_device_signature::KeypalDeviceSignature;
+use crate::keypal::keypal_device_verify_request::KeypalDeviceVerifyRequest;
 use crate::keystone::{
     keystone_sign_request::KeystoneSignRequest, keystone_sign_result::KeystoneSignResult,
 };
@@ -133,4 +135,6 @@ impl_cbor_bytes!(
     IotaSignHashRequest,
     IotaSignature,
     KeypalDeviceInfo,
+    KeypalDeviceVerifyRequest,
+    KeypalDeviceSignature,
 );

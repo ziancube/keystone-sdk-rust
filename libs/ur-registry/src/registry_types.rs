@@ -35,6 +35,8 @@ pub enum URType {
     IotaSignHashRequest(String),
     ErgoSignRequest(String),
     KeypalDeviceInfo(String),
+    KeypalDeviceVerifyRequest(String),
+    KeypalDeviceSignature(String),
 }
 
 impl URType {
@@ -78,6 +80,10 @@ impl URType {
             "iota-sign-request" => Ok(URType::IotaSignRequest(type_str.to_string())),
             "ergo-sign-request" => Ok(URType::ErgoSignRequest(type_str.to_string())),
             "keypal-device-info" => Ok(URType::KeypalDeviceInfo(type_str.to_string())),
+            "keypal-device-verify-request" => {
+                Ok(URType::KeypalDeviceVerifyRequest(type_str.to_string()))
+            }
+            "keypal-device-signature" => Ok(URType::KeypalDeviceSignature(type_str.to_string())),
             _ => Err(URError::NotSupportURTypeError(type_str.to_string())),
         }
     }
@@ -116,6 +122,8 @@ impl URType {
             URType::IotaSignHashRequest(type_str) => type_str.to_string(),
             URType::ErgoSignRequest(type_str) => type_str.to_string(),
             URType::KeypalDeviceInfo(type_str) => type_str.to_string(),
+            URType::KeypalDeviceVerifyRequest(type_str) => type_str.to_string(),
+            URType::KeypalDeviceSignature(type_str) => type_str.to_string(),
         }
     }
 }
@@ -244,3 +252,7 @@ pub const ZCASH_PCZT: RegistryType = RegistryType("zcash-pczt", Some(49204));
 
 // Keypal
 pub const KEYPAL_DEVICE_INFO: RegistryType = RegistryType("keypal-device-info", Some(80001));
+pub const KEYPAL_DEVICE_VERIFY_REQUEST: RegistryType =
+    RegistryType("keypal-device-verify-request", Some(80002));
+pub const KEYPAL_DEVICE_SIGNATURE: RegistryType =
+    RegistryType("keypal-device-signature", Some(80003));
