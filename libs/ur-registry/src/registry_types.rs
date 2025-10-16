@@ -34,6 +34,7 @@ pub enum URType {
     IotaSignRequest(String),
     IotaSignHashRequest(String),
     ErgoSignRequest(String),
+    KeypalDeviceInfo(String),
 }
 
 impl URType {
@@ -76,6 +77,7 @@ impl URType {
             "iota-sign-hash-request" => Ok(URType::IotaSignHashRequest(type_str.to_string())),
             "iota-sign-request" => Ok(URType::IotaSignRequest(type_str.to_string())),
             "ergo-sign-request" => Ok(URType::ErgoSignRequest(type_str.to_string())),
+            "keypal-device-info" => Ok(URType::KeypalDeviceInfo(type_str.to_string())),
             _ => Err(URError::NotSupportURTypeError(type_str.to_string())),
         }
     }
@@ -113,6 +115,7 @@ impl URType {
             URType::IotaSignRequest(type_str) => type_str.to_string(),
             URType::IotaSignHashRequest(type_str) => type_str.to_string(),
             URType::ErgoSignRequest(type_str) => type_str.to_string(),
+            URType::KeypalDeviceInfo(type_str) => type_str.to_string(),
         }
     }
 }
@@ -144,7 +147,8 @@ pub const CRYPTO_MULTI_ACCOUNTS: RegistryType = RegistryType("crypto-multi-accou
 // ETH
 pub const ETH_SIGN_REQUEST: RegistryType = RegistryType("eth-sign-request", Some(401));
 pub const ETH_SIGNATURE: RegistryType = RegistryType("eth-signature", Some(402));
-pub const ETH_BATCH_SIGN_REQUEST: RegistryType = RegistryType("eth-batch-sign-request", Some(40404));
+pub const ETH_BATCH_SIGN_REQUEST: RegistryType =
+    RegistryType("eth-batch-sign-request", Some(40404));
 pub const ETH_BATCH_SIGNATURE: RegistryType = RegistryType("eth-batch-signature", Some(40405));
 // SOL
 pub const SOL_SIGN_REQUEST: RegistryType = RegistryType("sol-sign-request", Some(1101));
@@ -237,3 +241,6 @@ pub const ZCASH_FULL_VIEWING_KEY: RegistryType =
 pub const ZCASH_UNIFIED_FULL_VIEWING_KEY: RegistryType =
     RegistryType("zcash-unified-full-viewing-key", Some(49203));
 pub const ZCASH_PCZT: RegistryType = RegistryType("zcash-pczt", Some(49204));
+
+// Keypal
+pub const KEYPAL_DEVICE_INFO: RegistryType = RegistryType("keypal-device-info", Some(80001));
