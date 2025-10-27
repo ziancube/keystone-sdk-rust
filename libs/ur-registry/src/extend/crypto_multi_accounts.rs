@@ -17,6 +17,7 @@ const DEVICE: u8 = 3;
 const DEVICE_ID: u8 = 4;
 const DEVICE_VERSION: u8 = 5;
 const WALLET_NAME: u8 = 6;
+const BLE_NAME: u8 = 7;
 
 #[derive(Default, Clone, Debug)]
 pub struct CryptoMultiAccounts {
@@ -26,6 +27,7 @@ pub struct CryptoMultiAccounts {
     device_id: Option<String>,
     device_version: Option<String>,
     wallet_name: Option<String>,
+    ble_name: Option<String>,
 }
 
 impl CryptoMultiAccounts {
@@ -61,6 +63,10 @@ impl CryptoMultiAccounts {
         self.wallet_name = Some(wallet_name);
     }
 
+    pub fn set_ble_name(&mut self, ble_name: String) {
+        self.ble_name = Some(ble_name);
+    }
+
     pub fn new(
         master_fingerprint: Fingerprint,
         keys: Vec<CryptoHDKey>,
@@ -75,6 +81,7 @@ impl CryptoMultiAccounts {
             device_id,
             device_version,
             wallet_name: None,
+            ble_name: None,
         }
     }
 
@@ -85,6 +92,7 @@ impl CryptoMultiAccounts {
         device_id: Option<String>,
         device_version: Option<String>,
         wallet_name: Option<String>,
+        ble_name: Option<String>,
     ) -> CryptoMultiAccounts {
         CryptoMultiAccounts {
             master_fingerprint,
@@ -93,6 +101,7 @@ impl CryptoMultiAccounts {
             device_id,
             device_version,
             wallet_name,
+            ble_name,
         }
     }
 
@@ -113,6 +122,9 @@ impl CryptoMultiAccounts {
     }
     pub fn get_wallet_name(&self) -> Option<String> {
         self.wallet_name.clone()
+    }
+    pub fn get_ble_name(&self) -> Option<String> {
+        self.ble_name.clone()
     }
 }
 
@@ -141,6 +153,9 @@ impl<C> minicbor::Encode<C> for CryptoMultiAccounts {
         if self.wallet_name.is_some() {
             size += 1;
         }
+        if self.ble_name.is_some() {
+            size += 1;
+        }
         e.map(size)?;
 
         e.int(Int::from(MASTER_FINGERPRINT))?
@@ -164,6 +179,10 @@ impl<C> minicbor::Encode<C> for CryptoMultiAccounts {
 
         if let Some(wallet_name) = &self.wallet_name {
             e.int(Int::from(WALLET_NAME))?.str(wallet_name)?;
+        }
+
+        if let Some(ble_name) = &self.ble_name {
+            e.int(Int::from(BLE_NAME))?.str(ble_name)?;
         }
 
         Ok(())
@@ -200,6 +219,14 @@ impl<'b, C> minicbor::Decode<'b, C> for CryptoMultiAccounts {
                 }
                 DEVICE_VERSION => {
                     obj.device_version = Some(d.str()?.to_string());
+                }
+
+                WALLET_NAME => {
+                    obj.wallet_name = Some(d.str()?.to_string());
+                }
+
+                BLE_NAME => {
+                    obj.ble_name = Some(d.str()?.to_string());
                 }
                 _ => {}
             }
