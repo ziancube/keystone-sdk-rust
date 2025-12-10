@@ -37,6 +37,8 @@ pub enum URType {
     KeypalDeviceInfo(String),
     KeypalDeviceVerifyRequest(String),
     KeypalDeviceSignature(String),
+    KeypalTronSignRequest(String),
+    KeypalTronSignature(String),
 }
 
 impl URType {
@@ -84,6 +86,8 @@ impl URType {
                 Ok(URType::KeypalDeviceVerifyRequest(type_str.to_string()))
             }
             "keypal-device-signature" => Ok(URType::KeypalDeviceSignature(type_str.to_string())),
+            "keypal-tron-sign-request" => Ok(URType::KeypalTronSignRequest(type_str.to_string())),
+            "keypal-tron-signature" => Ok(URType::KeypalTronSignature(type_str.to_string())),
             _ => Err(URError::NotSupportURTypeError(type_str.to_string())),
         }
     }
@@ -124,6 +128,8 @@ impl URType {
             URType::KeypalDeviceInfo(type_str) => type_str.to_string(),
             URType::KeypalDeviceVerifyRequest(type_str) => type_str.to_string(),
             URType::KeypalDeviceSignature(type_str) => type_str.to_string(),
+            URType::KeypalTronSignRequest(type_str) => type_str.to_string(),
+            URType::KeypalTronSignature(type_str) => type_str.to_string(),
         }
     }
 }
@@ -256,3 +262,7 @@ pub const KEYPAL_DEVICE_VERIFY_REQUEST: RegistryType =
     RegistryType("keypal-device-verify-request", Some(80002));
 pub const KEYPAL_DEVICE_SIGNATURE: RegistryType =
     RegistryType("keypal-device-signature", Some(80003));
+pub const KEYPAL_TRON_SIGN_REQUEST: RegistryType =
+    RegistryType("keypal-tron-sign-request", Some(80004));
+pub const KEYPAL_TRON_SIGNATURE: RegistryType =
+    RegistryType("keypal-tron-signature", Some(80005));
