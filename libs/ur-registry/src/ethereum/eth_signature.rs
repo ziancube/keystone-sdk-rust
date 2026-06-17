@@ -12,12 +12,14 @@ use minicbor::{Decoder, Encoder};
 const REQUEST_ID: u8 = 1;
 const SIGNATURE: u8 = 2;
 const ORIGIN: u8 = 3;
+const AUTHORIZATION: u8 = 20;
 
 #[derive(Clone, Debug, Default)]
 pub struct EthSignature {
     request_id: Option<Bytes>,
     signature: Bytes,
     origin: Option<String>,
+    authorization: Option<Bytes>,
 }
 
 impl EthSignature {
@@ -37,11 +39,17 @@ impl EthSignature {
         self.origin = Some(origin)
     }
 
-    pub fn new(request_id: Option<Bytes>, signature: Bytes, origin: Option<String>) -> Self {
+    pub fn new(
+        request_id: Option<Bytes>,
+        signature: Bytes,
+        origin: Option<String>,
+        authorization: Option<Bytes>,
+    ) -> Self {
         EthSignature {
             request_id,
             signature,
             origin,
+            authorization,
         }
     }
 
@@ -53,6 +61,9 @@ impl EthSignature {
     }
     pub fn get_origin(&self) -> Option<String> {
         self.origin.clone()
+    }
+    pub fn get_authorization(&self) -> Option<Bytes> {
+        self.authorization.clone()
     }
 }
 
@@ -75,6 +86,9 @@ impl<C> minicbor::Encode<C> for EthSignature {
         if self.origin.is_some() {
             size += 1;
         }
+        if self.authorization.is_some() {
+            size += 1;
+        }
         e.map(size)?;
         if let Some(request_id) = &self.request_id {
             e.int(Int::from(REQUEST_ID))?
@@ -85,6 +99,9 @@ impl<C> minicbor::Encode<C> for EthSignature {
 
         if let Some(origin) = &self.origin {
             e.int(Int::from(ORIGIN))?.str(origin)?;
+        }
+        if let Some(authorization) = &self.authorization {
+            e.int(Int::from(AUTHORIZATION))?.bytes(authorization)?;
         }
 
         Ok(())
@@ -107,6 +124,9 @@ impl<'b, C> minicbor::Decode<'b, C> for EthSignature {
                 }
                 ORIGIN => {
                     obj.origin = Some(d.str()?.to_string());
+                }
+                AUTHORIZATION => {
+                    obj.authorization = Some(d.bytes()?.to_vec());
                 }
                 _ => {}
             }
