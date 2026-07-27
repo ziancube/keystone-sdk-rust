@@ -31,6 +31,7 @@ use crate::ethereum::eth_batch_sign_requests::EthBatchSignRequest;
 use crate::ethereum::eth_batch_signature::EthBatchSignature;
 use crate::ethereum::{eth_sign_request::EthSignRequest, eth_signature::EthSignature};
 use crate::extend::crypto_multi_accounts::CryptoMultiAccounts;
+use crate::extend::keypal_crypto_multi_accounts_request::KeypalCryptoMultiAccountsRequest;
 use crate::extend::{
     key_derivation::KeyDerivationCall, key_derivation_schema::KeyDerivationSchema,
     qr_hardware_call::QRHardwareCall,
@@ -141,4 +142,5 @@ impl_cbor_bytes!(
     KeypalDeviceSignature,
     KeypalTronSignRequest,
     KeypalTronSignature,
+    KeypalCryptoMultiAccountsRequest,
 );

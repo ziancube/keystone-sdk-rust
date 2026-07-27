@@ -39,6 +39,7 @@ pub enum URType {
     KeypalDeviceSignature(String),
     KeypalTronSignRequest(String),
     KeypalTronSignature(String),
+    KeypalCryptoMultiAccountsRequest(String),
 }
 
 impl URType {
@@ -88,6 +89,9 @@ impl URType {
             "keypal-device-signature" => Ok(URType::KeypalDeviceSignature(type_str.to_string())),
             "keypal-tron-sign-request" => Ok(URType::KeypalTronSignRequest(type_str.to_string())),
             "keypal-tron-signature" => Ok(URType::KeypalTronSignature(type_str.to_string())),
+            "keypal-crypto-multi-accounts-request" => Ok(URType::KeypalCryptoMultiAccountsRequest(
+                type_str.to_string(),
+            )),
             _ => Err(URError::NotSupportURTypeError(type_str.to_string())),
         }
     }
@@ -130,6 +134,7 @@ impl URType {
             URType::KeypalDeviceSignature(type_str) => type_str.to_string(),
             URType::KeypalTronSignRequest(type_str) => type_str.to_string(),
             URType::KeypalTronSignature(type_str) => type_str.to_string(),
+            URType::KeypalCryptoMultiAccountsRequest(type_str) => type_str.to_string(),
         }
     }
 }

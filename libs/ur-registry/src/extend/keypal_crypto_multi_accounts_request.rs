@@ -34,7 +34,7 @@ impl AccountRequest {
     pub fn get_algo_or_default(&self) -> DerivationAlgo {
         match self.get_algo() {
             Some(a) => a,
-            None => DerivationAlgo::Slip10,
+            None => DerivationAlgo::Bip32Ed25519,
         }
     }
 }
