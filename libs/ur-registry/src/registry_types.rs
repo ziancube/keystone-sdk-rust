@@ -264,5 +264,8 @@ pub const KEYPAL_DEVICE_SIGNATURE: RegistryType =
     RegistryType("keypal-device-signature", Some(80003));
 pub const KEYPAL_TRON_SIGN_REQUEST: RegistryType =
     RegistryType("keypal-tron-sign-request", Some(80004));
-pub const KEYPAL_TRON_SIGNATURE: RegistryType =
-    RegistryType("keypal-tron-signature", Some(80005));
+pub const KEYPAL_TRON_SIGNATURE: RegistryType = RegistryType("keypal-tron-signature", Some(80005));
+pub const KEYPAL_ACCOUNTS_REQUEST: RegistryType =
+    RegistryType("keypal-accounts-request", Some(80006));
+pub const KEYPAL_CRYPTO_MULTI_ACCOUNTS_REQUEST: RegistryType =
+    RegistryType("keypal-crypto-multi-accounts-request", Some(80007));
