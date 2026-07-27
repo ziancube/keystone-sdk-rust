@@ -47,7 +47,7 @@ pub struct SolSignRequest {
     address: Option<Bytes>,
     origin: Option<String>,
     sign_type: SignType,
-    chain_id: Option<String>, 
+    chain_id: Option<String>,
 }
 
 impl SolSignRequest {
@@ -283,6 +283,7 @@ mod tests {
             None,
             Some("solflare".to_string()),
             SignType::Transaction,
+            Some("1".to_string()),
         );
         assert_eq!(
             "a501d825509b1deb4d3b7d4bad9bdd2b0d7b3dcb6d02589601000103c8d842a2f17fd7aab608ce2ea535a6e958dffa20caf669b347b911c4171965530f957620b228bae2b94c82ddd4c093983a67365555b737ec7ddc1117e61c72e0000000000000000000000000000000000000000000000000000000000000000010295cc2f1f39f3604718496ea00676d6a72ec66ad09d926e3ece34f565f18d201020200010c0200000000e1f5050000000003d90130a20188182cf51901f5f500f500f5021a121212120568736f6c666c6172650601",

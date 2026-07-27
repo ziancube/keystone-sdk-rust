@@ -171,7 +171,8 @@ mod tests {
             254, 134, 243, 53, 247, 19,
         ]
         .to_vec();
-        let eth_signature = EthSignature::new(request_id, signature, Some("keystone".to_string()));
+        let eth_signature =
+            EthSignature::new(request_id, signature, Some("keystone".to_string()), None);
         assert_eq!(
             "a301d825509b1deb4d3b7d4bad9bdd2b0d7b3dcb6d025841d4f0a7bcd95bba1fbb1051885054730e3f47064288575aacc102fbbf6a9a14daa066991e360d3e3406c20c00a40973eff37c7d641e5b351ec4a99bfe86f335f71303686b657973746f6e65",
             hex::encode(eth_signature.to_bytes().unwrap()).to_lowercase()

@@ -199,3 +199,71 @@ impl<'b, C> minicbor::Decode<'b, C> for KeypalCryptoMultiAccountsRequest {
         Ok(result)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    extern crate std;
+
+    use super::*;
+    use alloc::string::String;
+    use alloc::vec;
+    use ur_parse_lib::keystone_ur_encoder::probe_encode;
+
+    #[test]
+    fn build_keypal_crypto_multi_accounts_request() {
+        let mut account = AccountRequest::default();
+        account.set_key_path(String::from("m/44'/60'/0'/0/0"));
+        account.set_curve(Some(Curve::Secp256k1));
+        account.set_algo(Some(DerivationAlgo::Slip10));
+        account.set_chain_type(Some(String::from("ETH")));
+
+        let mut solana_account = AccountRequest::default();
+        solana_account.set_key_path(String::from("m/44'/501'/0'/0'"));
+        solana_account.set_curve(Some(Curve::Ed25519));
+        solana_account.set_algo(Some(DerivationAlgo::Slip10));
+        solana_account.set_chain_type(Some(String::from("SOL")));
+
+        let mut request = KeypalCryptoMultiAccountsRequest::default();
+        request.set_paths(vec![account.clone(), solana_account.clone()]);
+        request.set_origin(Some(String::from("KeyPal2")));
+
+        let encoded: Vec<u8> = minicbor::to_vec(&request).unwrap();
+        let ur = probe_encode(
+            &encoded,
+            400,
+            KeypalCryptoMultiAccountsRequest::get_registry_type().get_type(),
+        )
+        .unwrap();
+        std::println!("{}", ur.data);
+        let decoded: KeypalCryptoMultiAccountsRequest = minicbor::decode(&encoded).unwrap();
+
+        assert_eq!(decoded.get_paths().len(), 2);
+        assert_eq!(decoded.get_paths()[0].get_key_path(), "m/44'/60'/0'/0/0");
+        assert!(matches!(
+            decoded.get_paths()[0].get_curve(),
+            Some(Curve::Secp256k1)
+        ));
+        assert!(matches!(
+            decoded.get_paths()[0].get_algo(),
+            Some(DerivationAlgo::Slip10)
+        ));
+        assert_eq!(
+            decoded.get_paths()[0].get_chain_type(),
+            Some(String::from("ETH"))
+        );
+        assert_eq!(decoded.get_paths()[1].get_key_path(), "m/44'/501'/0'/0'");
+        assert!(matches!(
+            decoded.get_paths()[1].get_curve(),
+            Some(Curve::Ed25519)
+        ));
+        assert!(matches!(
+            decoded.get_paths()[1].get_algo(),
+            Some(DerivationAlgo::Slip10)
+        ));
+        assert_eq!(
+            decoded.get_paths()[1].get_chain_type(),
+            Some(String::from("SOL"))
+        );
+        assert_eq!(decoded.get_origin(), Some(String::from("KeyPal2")));
+    }
+}

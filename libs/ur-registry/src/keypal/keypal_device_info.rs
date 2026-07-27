@@ -121,12 +121,10 @@ mod tests {
 
     #[test]
     fn test_encode() {
-        let features = Some(
-            [
-                155, 29, 235, 77, 59, 125, 75, 173, 155, 221, 43, 13, 123, 61, 203, 109,
-            ]
-            .to_vec(),
-        );
+        let features = [
+            155, 29, 235, 77, 59, 125, 75, 173, 155, 221, 43, 13, 123, 61, 203, 109,
+        ]
+        .to_vec();
         let certificate = [
             212, 240, 167, 188, 217, 91, 186, 31, 187, 16, 81, 136, 80, 84, 115, 14, 63, 71, 6, 66,
             136, 87, 90, 172, 193, 2, 251, 191, 106, 154, 20, 218, 160, 102, 153, 30, 54, 13, 62,
@@ -134,7 +132,7 @@ mod tests {
             254, 134, 243, 53, 247, 19,
         ]
         .to_vec();
-        let keypal_device_info = KeypalDeviceInfo::new(features, certificate.to_string());
+        let keypal_device_info = KeypalDeviceInfo::new(features, hex::encode(certificate.clone()));
         assert_eq!(
             "a301d825509b1deb4d3b7d4bad9bdd2b0d7b3dcb6d025841d4f0a7bcd95bba1fbb1051885054730e3f47064288575aacc102fbbf6a9a14daa066991e360d3e3406c20c00a40973eff37c7d641e5b351ec4a99bfe86f335f71303686b657973746f6e65",
             hex::encode(keypal_device_info.to_bytes().unwrap()).to_lowercase()
@@ -150,16 +148,10 @@ mod tests {
         let keypal_device_info = KeypalDeviceInfo::from_cbor(bytes).unwrap();
         assert_eq!(
             [155, 29, 235, 77, 59, 125, 75, 173, 155, 221, 43, 13, 123, 61, 203, 109].to_vec(),
-            keypal_device_info.get_features().unwrap()
+            keypal_device_info.get_features()
         );
         assert_eq!(
-            [
-                212, 240, 167, 188, 217, 91, 186, 31, 187, 16, 81, 136, 80, 84, 115, 14, 63, 71, 6,
-                66, 136, 87, 90, 172, 193, 2, 251, 191, 106, 154, 20, 218, 160, 102, 153, 30, 54,
-                13, 62, 52, 6, 194, 12, 0, 164, 9, 115, 239, 243, 124, 125, 100, 30, 91, 53, 30,
-                196, 169, 155, 254, 134, 243, 53, 247, 19
-            ]
-            .to_vec(),
+            "d4f0a7bcd95bba1fbb1051885054730e3f47064288575aacc102fbbf6a9a14daa066991e360d3e3406c20c00a40973eff37c7d641e5b351ec4a99bfe86f335f713",
             keypal_device_info.get_certificate()
         );
     }

@@ -1433,6 +1433,7 @@ dependencies = [
  "serde",
  "thiserror-core",
  "ur",
+ "ur-parse-lib",
 ]
 
 [[package]]
