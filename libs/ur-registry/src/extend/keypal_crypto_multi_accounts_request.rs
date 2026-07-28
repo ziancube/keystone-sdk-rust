@@ -212,7 +212,7 @@ mod tests {
     #[test]
     fn build_keypal_crypto_multi_accounts_request() {
         let mut account = AccountRequest::default();
-        account.set_key_path(String::from("m/44'/60'/0'/0/0"));
+        account.set_key_path(String::from("m/44'/60'/0'"));
         account.set_curve(Some(Curve::Secp256k1));
         account.set_algo(Some(DerivationAlgo::Slip10));
         account.set_chain_type(Some(String::from("ETH")));
@@ -223,8 +223,18 @@ mod tests {
         solana_account.set_algo(Some(DerivationAlgo::Slip10));
         solana_account.set_chain_type(Some(String::from("SOL")));
 
+        let mut solana_account2 = AccountRequest::default();
+        solana_account2.set_key_path(String::from("m/44'/501'/0'/0'"));
+        solana_account2.set_curve(Some(Curve::Ed25519));
+        solana_account2.set_algo(Some(DerivationAlgo::Slip10));
+        solana_account2.set_chain_type(Some(String::from("SOL")));
+
         let mut request = KeypalCryptoMultiAccountsRequest::default();
-        request.set_paths(vec![account.clone(), solana_account.clone()]);
+        request.set_paths(vec![
+            account.clone(),
+            solana_account.clone(),
+            solana_account2.clone(),
+        ]);
         request.set_origin(Some(String::from("KeyPal2")));
 
         let encoded: Vec<u8> = minicbor::to_vec(&request).unwrap();
@@ -237,8 +247,8 @@ mod tests {
         std::println!("{}", ur.data);
         let decoded: KeypalCryptoMultiAccountsRequest = minicbor::decode(&encoded).unwrap();
 
-        assert_eq!(decoded.get_paths().len(), 2);
-        assert_eq!(decoded.get_paths()[0].get_key_path(), "m/44'/60'/0'/0/0");
+        assert_eq!(decoded.get_paths().len(), 3);
+        assert_eq!(decoded.get_paths()[0].get_key_path(), "m/44'/60'/0'");
         assert!(matches!(
             decoded.get_paths()[0].get_curve(),
             Some(Curve::Secp256k1)
